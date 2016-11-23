@@ -113,7 +113,9 @@ def get_formula():
     
 @app.route('/gethindiformula', methods=['POST'])
 def get_hindiformula():    
-    
+	"""
+	Get the hindi questions and respond
+	"""
     try: 
         question=request.form['formula']        
         matchObj = re.match( r'(.*)की (.*?) .*', question, re.M|re.I)
