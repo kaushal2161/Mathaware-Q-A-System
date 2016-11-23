@@ -10,6 +10,7 @@ sudo apt-get install python3
 ##CoreNlp
 
 CoreNlp is resposible for extraction Triple (subject, predicate, object) from the questions.
+
 1)  Downloading POS Tagger
 
 
