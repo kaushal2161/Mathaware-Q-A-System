@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title data-i18n="title"></title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap.min.css')}}">
+		
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
+		<script type="text/javascript" src="{{url_for('static', filename='jquery.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static', filename='jquery.jslatex.js')}}"></script>
+		<script type="text/javascript" src="{{url_for('static', filename='main.js')}}"></script>
+		<script>
+		$(function () {
+		    $(".latex").latex();
+		});
+		</script>
+		
+	</head>
+	<body>
+		<div id="main">
+			<h1 class="titleText" style="font-weight:600;">Mathaware Q&A System</h1>
+			<div class="form-group col-sm-2 col-sm-offset-10">
+			
+
+			    <label for="exampleInputEmail1"><span class="langText">Language</span></label>
+			    <select class="form-control" id="langSelect" onchange="return languagechange();">
+			    	<option value="en">English</option>
+			    	<option value="hn">Hindi</option>
+			    </select>
+			</div>
+			
+			<div class="col-sm-12 col-xs-12">
+				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
+					<form class="form">
+						<div class="input-group" style="margin-top:20px;">
+						
+							 <input class="form-control" id="formula" aria-describedby="basic-addon2">
+							 <div class="input-group-btn"> 
+							 	<button type="button" class="btn btn-primary" onclick="return getResult();"><span id="Loader1" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="font-size:19px;"></span><span class="searchBtnText">Search</span></button> 
+							 </div>
+						
+						</div>
+					</form>
+					
+					<div class="panel panel-default userinputPanel" style="margin-top:30px;display:none;">
+					  <div class="panel-body">
+					  	<form class="form userInputForm">
+					  		<p class="formulaText" style="font-size:30px; font-weight:600;margin-left: 15px;width: 50px; height: 25px;"><span class="formula latex"></span></p>
+							<div class="userInputDiv"></div>				  	
+							<p class="InputErrorDiv" style="color:red;"></p>
+					  		
+							
+							<button type="button" class="btn btn-primary submitBtn" style="float:right;" onclick="return getResultFromInputs();"><span id="Loader2" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="font-size:19px;"></span><span class="submitBtnText">Submit</span></button>
+						</form>
+					  </div>
+					</div>	
+					
+					<div class="panel panel-default resultPanel" style="margin-top:30px;display:none;">
+					  <div class="panel-body">
+					     <h4 class="formheadlabel">Solution</h4>
+					     
+					     <p class="resultValue" style="font-size: 30px;font-weight: 600;">
+					     	
+					     </p>
+					     
+					  </div>
+					</div>	
+				</div>
+			</div>
+			
+		</div>
+	</body>
+</html>
