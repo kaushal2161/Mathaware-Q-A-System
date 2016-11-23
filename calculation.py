@@ -24,11 +24,17 @@ from latexformlaidentifiers import Formulacalculation, prepformula
 
 
 def getlhsrhs(formula,ext):
+    """
+        Break the formula into lhs and rhs
+    """
     global lhs
     global rhs    
     lhs,rhs=formula.split(ext,1)  
     
-def makeidentifier(symbol,values):    
+def makeidentifier(symbol,values): 
+    """
+        Make dictionary for Values of Symbol
+    """   
     symvalue={}
     for i in symbol:              
         for j in values:           
@@ -38,7 +44,10 @@ def makeidentifier(symbol,values):
                   
     return symvalue
 
-def makerespose(formul):
+def makeresponse(formul):
+    """
+        Make response for the API
+    """
     try:
         reques=Formulacalculation(formul)                         
         global identifiers
@@ -53,11 +62,11 @@ def makerespose(formul):
             newlist.append(dict(formula=formul))               
             
             resp=json.dumps(newlist) 
-            #print(resp) 
+             
             return resp   
         else:
-            resp=json.dumps(formul)          
-            return resp  
+                  
+            return "#"+ str(formul) 
     except Exception as e : return ("System is not able to understand the formula")
     
 
@@ -68,6 +77,10 @@ def my_form():
 
 @app.route('/getresponse', methods=['POST'])
 def my_form_post():
+    """
+        Get formula from the user input and process it
+        Return response
+    """
     try:
         if request.form['formula']:            
             global formula                
@@ -79,7 +92,7 @@ def my_form_post():
             processedformula=latexformlaidentifiers.prepformula(formula)  
             #print(processedformula)        
             if formula is not None: 
-                return makerespose(processedformula)   
+                return makeresponse(processedformula)   
             
             else:
                 return ("System is not able to find the result.")      
@@ -90,7 +103,12 @@ def my_form_post():
 
     
 @app.route('/getengformula', methods=['POST'])
-def get_formula(): 
+def get_formula():
+    """
+        Get English question from the user parse it to Questionparsing module to get Triple
+        Parse Triple (Subject, predicate, ?) to FormulaRequestHandler to get Formula from Wikidata
+        Return response 
+    """ 
        
     try:
         question=request.form['formula']        
@@ -103,19 +121,22 @@ def get_formula():
         #print(formula)
         global processedformula
         processedformula=latexformlaidentifiers.prepformula(formula)  
-        #print(processedformula)     
-        if formula is not None: 
-            return makerespose(processedformula)       
+        print(formula)     
+        if(formula): 
+            return makeresponse(processedformula)       
             
         else:
             return ("System is not able to find the result.")
     except Exception : return ("System is not able to find the result.") 
     
 @app.route('/gethindiformula', methods=['POST'])
-def get_hindiformula():    
-	"""
-	Get the hindi questions and respond
-	"""
+def get_hindiformula():
+    """
+        Get Hindi question from the user and apply regex to get subject and predicate
+        Parse subject and predicate to HindiRequestHandler to get formula
+        Return response
+    """    
+	
     try: 
         question=request.form['formula']        
         matchObj = re.match( r'(.*)की (.*?) .*', question, re.M|re.I)
@@ -138,8 +159,9 @@ def get_hindiformula():
         formula=reques.answer()
         global processedformula
         processedformula=latexformlaidentifiers.prepformula(formula)            
-        if formula is not None:            
-            return makerespose(processedformula)
+        if formula is not None: 
+            print(formula)           
+            return makeresponse(processedformula)
         else:
             return ("System is not able to find the result.")             
         
@@ -147,9 +169,14 @@ def get_hindiformula():
         
 
 @app.route('/getfinalresult', methods=['POST'])
-def my_form_json():  
+def my_form_json(): 
+    """
+        Get Values for the identifiers
+        Return Calculated result 
+    """ 
+    
        
-       
+    try:   
         identifiers1 = request.data.decode('utf-8')    
         json1=json.loads(identifiers1)                      
         seprator= getidentifiers.formuladivision(formula)
@@ -170,7 +197,7 @@ def my_form_json():
                 
             return ("%.2e" % value)
             
-    #except Exception : return ("System is not able to calculate the result.")   
+    except Exception : return ("System is not able to calculate the result.")   
   
 if __name__ == '__main__':
     app.run(debug=True)
