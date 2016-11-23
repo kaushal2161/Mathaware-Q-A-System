@@ -7,7 +7,12 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 import xmltodict
 
 formula=defaultdict(list)
+
 def get_formula(sub,lang="en"):
+    """
+        Get subject number and language 
+        Return value of defining formula property:P2534
+    """
     try:
         subject= str(sub)        
         site = pywikibot.Site(lang, "wikipedia")
@@ -42,10 +47,15 @@ def get_formula(sub,lang="en"):
     '''
  
 def get_formula_geometry(sub,pred): 
+    """
+        Get subject and predicate number
+        Return value of has quality property : P1552
+    """
+    
     item_dict = sub.get()
     clm_dict = item_dict["claims"] 
     try:
-         #get the has quality property:P1552
+        #get the has quality property:P1552
         for clm in clm_dict["P1552"]:
             c=clm.getTarget()      
             if c == pred:
@@ -60,6 +70,10 @@ def get_formula_geometry(sub,pred):
         return []
         
 def get_formula_sparql(sub,pred):
+    """
+        Get subject and predicate number 
+        return formula
+    """
     subn=str(sub).replace("[[wikidata:",'').replace("]]",'')
     predn=str(pred).replace("[[wikidata:",'').replace("]]",'')
     
@@ -94,19 +108,19 @@ def get_formula_sparql(sub,pred):
 
 Hindigeolist=['क्षेत्रफल', 'आयतन' ,'समुद्र तट से ऊंचाई', 'लम्बाई','विकर्ण','सतह क्षेत्र','लंबाई']
 def get_item_number(subject,predicate,lang="en"):
+    """
+        Get subject, predicate and language
+        Return formula
+    """
     
     try:    
         usub=str(subject)
-        upred=str(predicate) 
-        
+        upred=str(predicate)         
         site = pywikibot.Site(lang, "wikipedia")
-        subjecti= pywikibot.Page(site,usub)   
-           
-        sitem = pywikibot.ItemPage.fromPage(subjecti) 
-        
+        subjecti= pywikibot.Page(site,usub)           
+        sitem = pywikibot.ItemPage.fromPage(subjecti)        
         predicatei= pywikibot.Page(site, upred)  
-        pitem = pywikibot.ItemPage.fromPage(predicatei)
-        #print(sitem,pitem)
+        pitem = pywikibot.ItemPage.fromPage(predicatei)        
         if(lang=="en"):                       
             return get_formula_geometry(sitem,pitem)        
         if upred in Hindigeolist:           
@@ -117,22 +131,18 @@ def get_item_number(subject,predicate,lang="en"):
         #error= ("item " + upred + " could not be found in Wikidata.")
         return []   
     
-    
-        
+ 
 
  
 geometry=['surface area','volume','area','radius of circle','altitude','diagonal','medians','inradius','circumradius','length']
 formulalist=['formula','equation','mathematical formula']
 def predicate(predicate,subject):    
-    #print(predicate,subject)
+    
     if predicate in geometry:        
         return get_item_number(subject,predicate)
     elif predicate in formulalist:              
         return get_formula(subject)
-        # Here, node.subject is a resource, so node.subject.value exists
-        # and is a string.
-       #return get_locations_as_list(node.subject.value)
-
+        
 class FormulaRequestHandler:
     
     def __init__(self, request):
@@ -146,12 +156,12 @@ class FormulaRequestHandler:
         
       
 class HindiRequestHandler:
+    
     def __init__(self, language,subject,predicate):
         self.language = language
         self.subject=subject
         self.predicate=predicate       
-        
-    
+            
     
     def answer(self):
         
