@@ -53,8 +53,11 @@ https://github.com/augustt198/latex2sympy
 apt-get install python3-sympy
 
 ##ppp_modules
+
 pip3 install --user ppp_questionparsing_grammatical
+
 pip3 install git+https://github.com/ProjetPP/PPP-datamodel-Python.git
+
 pip3 install git+https://github.com/ProjetPP/PPP-libmodule-Python.git
 
 ##xmltodic
