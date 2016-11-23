@@ -40,9 +40,13 @@ https://tools.wmflabs.org/pywikibot/
 
 ##latex2sympy-master
 Used to convert variant of latex formula to sympy equivalent form
+
+
 ANTLR is used to generate the parser:
+
     sudo apt-get install antlr4
 For latex2sympy download from
+
 https://github.com/augustt198/latex2sympy
 
 ##sympy
