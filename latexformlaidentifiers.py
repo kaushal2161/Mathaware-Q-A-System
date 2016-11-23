@@ -13,6 +13,9 @@ contant={'pi':'3.141592653589793','golden':'1.618033988749895','golden_ratio':'1
          'm_e':'9.10938356e-31','electron_mass':'9.10938356e-31','m_p':'1.672621898e-27','proton_mass':'1.672621898e-27','m_n':'1.672621898e-27','neutron_mass':'1.672621898e-27','S':'5.24411510858423962092'}
 
 def prepformula(formula):
+    """
+        Process of formula
+    """
     
     replace={"{\displaystyle":"","\\tfrac":"\\frac","\\left":"","\\right":"","\\mathrm":"","\\textbf":"","\\begin":"","\end":"","\\bigg":"","\\vec":""}    
     
@@ -63,7 +66,8 @@ def equality(formula,ext):
 
     
     
-def formuladivision(formula):    
+def formuladivision(formula): 
+       
     k = ['=', '\leq', '\req', '\\approx']         
     if '=' in formula:
         ext = '='              
@@ -85,25 +89,21 @@ def formuladivision(formula):
         return None
 
 class Formulacalculation:
+    
     def __init__(self, request):
         self.formula = request
         print(self.formula)
-    #formula="T=\tfrac{1}{2}ab"
+    
     def answer(self):
         try:
-            #preprocessedformula=prepformula(self.formula)
-            #print(preprocessedformula)
+            
             formula=self.formula
             global seprator 
-            seprator= formuladivision(formula)
-            #print(seprator)
+            seprator= formuladivision(formula)            
             if seprator is not None:
                 symbol=equality(formula,seprator)
             else:
-                symbol=evalformula(formula)
-                
-            #listsymbol=list(symbol)  
-            #print(symbol)                  
+                symbol=evalformula(formula)                               
             return symbol
             
         except Exception as e : print(e)
