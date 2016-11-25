@@ -61,8 +61,8 @@ pip3 install git+https://github.com/ProjetPP/PPP-datamodel-Python.git
 pip3 install git+https://github.com/ProjetPP/PPP-libmodule-Python.git
 
 ##xmltodic
-pip install xmltodict
+pip3 install xmltodict
 
 ##flask
-pip install Flask
+pip3 install Flask
 
