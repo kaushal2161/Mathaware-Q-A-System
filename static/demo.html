@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title data-i18n="title"></title>
+		<meta charset="utf-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		
+	</head>
+	<body>
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		    <div class="container">
+		        <div class="navbar-header">
+		            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content-collapse">
+		                <span class="sr-only">Toggle navigation</span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		            </button>
+		            <a class="navbar-brand" href="#">
+		            </a>
+		        </div>
+		        <div class="collapse navbar-collapse" id="navbar-content-collapse">
+		            <ul class="nav navbar-nav navbar-right">
+		                <li><a href="http://192.52.2.151:5000/">Home</a></li>
+		                <li><a href="{{url_for('static', filename='demo.html')}}">Demo</a></li>
+		                <li><a href="https://github.com/kaushal2161/Mathaware-Q-A-System">Github</a></li>
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+		
+		<div class="container-narrow" style="margin: 0 auto;max-width: 700px;margin-top:80px;">
+      		<div class="content">
+				<div class="page-header">
+				  <h1>Examples of questions</h1>
+				</div>
+				<div class="row-fluid">
+				  <div class="span12">
+					<h4 id="keyword-questions">English questions</h4>
+					<hr/>
+					<ul>
+					  	<li><p>What is the volume of Regular dodecahedron ?</p></li>
+						<li><p>What is the formula for geometric mean theorem ?</p></li>
+						<li><p>What is the volume of pentagonal prism ?</p></li>
+						<li><p>What is the formula for BEST theorem ?</p></li>
+						<li><p>What is the formula for gas ?</p></li>
+						<li><p>What is the formula for Virasoro algebra ?</p></li>
+						<li><p>What is the volume of pyramid ?</p></li>
+						<li><p>What is the area of triangular cupola ?</p></li>
+						<li><p>Area of Extouch triangle?</p></li>
+						<li><p>What is the formula for pythaforean theorem ?</p></li> 
+					</ul>
+					<hr/>
+					<h4 id="english-questions">Hindi questions</h4>
+					<hr/>
+					<ul>
+					  	<li><p>पाइथागोरस प्रमेय के लिए फार्मूला क्या है ?</p></li>
+						<li><p>ऊर्जा और द्रव्यमान के बीच क्या संबंध है ?</p></li>
+						<li><p>द्रव्यमान और त्वरण के बीच क्या संबंध है ?</p></li>
+						<li><p>गोला के लिए आयतन क्या है ?</p></li>
+					</ul>
+					<hr/>
+					<h4 id="english-questions">Direct Formula</h4>
+					<hr/>
+					<ul>
+					  	<li><p>A = \frac{1}{2}(x_1  + x_2 )h</p></li>
+						<li><p>A = \frac{{\theta r^2 }}{2}</p></li>
+						<li><p>P = 2l + 2w</p></li>
+						<li><p>V = \frac{{4\pi r^3 }}{3}</p></li>
+						<li><p>A = \frac{1}{2}ab\sin C</p></li>
+						<li><p>\lambda  = \frac{h}{{mv}}</p></li>
+						<li><p>T = \frac{{\hbar c^3 }}{{8\pi kGM}}</p></li>
+						<li><p>E = mc^2</p></li>
+					</ul>
+				  </div>
+				</div>
+			</div>
+		</div>
+		
+		<footer>
+			<p class="text-center">Tool written by <b>Kaushal Dudhat</b></p>
+		</footer>
+	</body>
+</html>
