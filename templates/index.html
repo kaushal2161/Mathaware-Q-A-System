@@ -3,8 +3,7 @@
 	<head>
 		<title data-i18n="title"></title>
 		<meta charset="utf-8">
-		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap.min.css')}}">
-		
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='bootstrap.min.css')}}">		
 		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 		<script type="text/javascript" src="{{url_for('static', filename='jquery.js')}}"></script>
 		<script type="text/javascript" src="{{url_for('static', filename='jquery.jslatex.js')}}"></script>
@@ -17,8 +16,30 @@
 		
 	</head>
 	<body>
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		    <div class="container">
+		        <div class="navbar-header">
+		            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-content-collapse">
+		                <span class="sr-only">Toggle navigation</span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		                <span class="icon-bar"></span>
+		            </button>
+		            <a class="navbar-brand" href="#">
+		            </a>
+		        </div>
+		        <div class="collapse navbar-collapse" id="navbar-content-collapse">
+		            <ul class="nav navbar-nav navbar-right">
+		                <li><a href="http://127.0.0.1:5000/">Home</a></li>
+		                <li><a href="{{url_for('static', filename='demo.html')}}">Demo</a></li>
+		                <li><a href="https://github.com/kaushal2161/Mathaware-Q-A-System">Github</a></li>
+		            </ul>
+		        </div>
+		    </div>
+		</div>
+
 		<div id="main">
-			<h1 class="titleText" style="font-weight:600;">Mathaware Q&A System</h1>
+			<h1 class="titleText" style="font-weight:600;">Matheaware Q&A System</h1>
 			<div class="form-group col-sm-2 col-sm-offset-10">
 			
 
@@ -31,16 +52,16 @@
 			
 			<div class="col-sm-12 col-xs-12">
 				<div class="col-sm-10 col-sm-offset-1 col-xs-12">
-					<form class="form">
+					<!-- <form class="form" id="firstForm" onsubmit="return getResult();"> -->
 						<div class="input-group" style="margin-top:20px;">
 						
 							 <input class="form-control" id="formula" aria-describedby="basic-addon2">
 							 <div class="input-group-btn"> 
-							 	<button type="button" class="btn btn-primary" onclick="return getResult();"><span id="Loader1" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="font-size:19px;"></span><span class="searchBtnText">Search</span></button> 
+							 	<button type="submit" class="btn btn-primary" onclick="return getResult();"><span id="Loader1" class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="font-size:19px;"></span><span class="searchBtnText">Search</span></button> 
 							 </div>
 						
 						</div>
-					</form>
+					<!-- </form> -->
 					
 					<div class="panel panel-default userinputPanel" style="margin-top:30px;display:none;">
 					  <div class="panel-body">
