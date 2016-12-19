@@ -5,6 +5,12 @@ $( document ).ready(function() {
 	$('#Loader2').hide();
 });
 
+document.addEventListener("keydown", function(event) {
+	if(event.keyCode == 13) {
+		getResult();
+	}
+});
+
 function getResult() {
 	var enteredFormula = $('#formula').val();
 	$('#Loader1').show();
