@@ -11,10 +11,15 @@ document.addEventListener("keydown", function(event) {
 	}
 });
 
+
+
 function getResult() {
 	var enteredFormula = $('#formula').val();
 	$('#Loader1').show();
 	$('.formulaText').hide();
+	$('.InputErrorDiv').hide();
+	$('.userinputPanel').hide();
+	$('.resultPanel').hide();
 	var statementQueFlag = false;
 	if(enteredFormula == "") {
 		alert("Please enter valid value");
@@ -38,11 +43,14 @@ function getResult() {
 			
 			
 			$.post(url, data)
-		    .done(function (response) {
+		    .done(function (response, statusText,xhr) {
 		    	$('.userInputDiv').empty();
-		    	if(response.indexOf('#') == 0) {
-		    		var formulaText = response.replace(/\\\\/g,'\\').replace("#",'');
-        			$('.formula').html(formulaText);
+		    	var status=xhr.status;
+		    	
+		    	
+		    	if(status == 206) {
+		    		var formulaText = response.replace(/\\\\/g,'\\');
+        			$('.formula').html(response);
         			setTimeout(function(){
         				$(".latex").latex();
         				$('.formulaText').show();
@@ -52,17 +60,16 @@ function getResult() {
     		        	$('#Loader1').hide();
     				}, 200);
 		    	} else {
-		    		if(response.length > 0 && response != 'System is not able to understand the formula' && response != "System is not able to find the result.") {
-				        var resultString = response;
+		    		if(status == 200) {
+				        var resultString = response;				        
 				        $('.userinputPanel').hide();
 				        $('.resultValue').text("");
 		          	  	$('.resultPanel').hide();
-				        var resultArray = resultString.split(',');
 				        $('.userInputDiv').empty();
 				        $('.InputErrorDiv').hide();
 			        	$('.submitBtn').show();
-				        if(resultArray.length == 1) {
-				        	var result = resultArray[0].replace('"','').replace('"','').replace('[','').replace(']','');
+				        if(resultString.length == 1) {
+				        	var result = resultString;
 				        	
 				        	if(result != '') {
 
@@ -80,7 +87,11 @@ function getResult() {
 				        		var string = '';
 				        		if(jQuery.inArray($.trim(result), constantArray) !== -1) {
 				        			var index = jQuery.inArray($.trim(result), constantArray);
-				        			string = '<input type="hidden" class="form-control" name="'+$.trim(result)+'" value="'+constantVal[index]+'">';
+				        			string = '<div class="form-group col-sm-6">'+
+											    '<label for="exampleInputEmail1"><span style="font-weight:500;font-size: 25px;">'+$.trim(result)+'</span></label>'+
+											    '<input type="text" class="form-control" placeholder="Enter Value" name="'+$.trim(result)+'" value="'+constantVal[index]+'">'+
+											'</div>';
+				        			// string = '<input type="hidden" class="form-control" name="'+$.trim(result)+'" value="'+constantVal[index]+'">';
 				        		} else {
 				        			string = '<div class="form-group col-sm-6">'+
 									    '<label for="exampleInputEmail1"><span style="font-weight:500;font-size: 25px;">'+$.trim(result)+'</span></label>'+
@@ -93,31 +104,19 @@ function getResult() {
 					        	$('.userInputDiv').append(string);
 					        	$('.userinputPanel').show();
 			        		
-				        		/*if (result.indexOf("formula") >= 0) {
-				        			
-				        			
-				        			var formulaText = result.replace('{formula: "','').replace('"}','').replace(/\\\\/g,'\\');
-				        			$('.formula').html(formulaText);
-				        			setTimeout(function(){
-				        				$(".latex").latex();
-				        				$('.formulaText').show();
-			        				}, 200);
-				        			
-				        		} else {}*/
+				        		
 				        	} else {
 				        		$('.resultValue').text(enteredFormula);
 				          	  	$('.resultPanel').show();
 				        	}
 				        } else {
-				        	$.each(resultArray, function(i, data) {
-					        	var result = data.replace('"','').replace('"','').replace('[','').replace(']','');
+				        	$.each(resultString, function(i, data) {
 					        	
-					        	if(result != '') {
+					        	var result = data;		        	
 					        		
-					        		if (result.indexOf("formula") >= 0) {
+					        		if (i == (resultString.length - 1)) {		        			
 					        			
-					        			var formulaText = result.replace('{formula: "','').replace('"}','').replace(/\\\\/g,'\\');
-					        			$('.formula').html(formulaText);
+					        			$('.formula').html(data.formula);
 					        			setTimeout(function(){
 					        				$(".latex").latex();
 					        				$('.formulaText').show();
@@ -138,7 +137,11 @@ function getResult() {
 						        		var string = '';
 						        		if(jQuery.inArray($.trim(result), constantArray) !== -1) {
 						        			var index = jQuery.inArray($.trim(result), constantArray);
-						        			string = '<input type="hidden" class="form-control" name="'+$.trim(result)+'" value="'+constantVal[index]+'">';
+						        			string = '<div class="form-group col-sm-6">'+
+													    '<label for="exampleInputEmail1"><span style="font-weight:500;font-size: 25px;">'+$.trim(result)+'</span></label>'+
+													    '<input type="text" class="form-control" placeholder="Enter Value" name="'+$.trim(result)+'" value="'+constantVal[index]+'">'+
+													'</div>';
+						        			// string = '<input type="hidden" class="form-control" name="'+$.trim(result)+'" value="'+constantVal[index]+'">';
 						        		} else {
 						        			string = '<div class="form-group col-sm-6">'+
 											    '<label for="exampleInputEmail1"><span style="font-weight:500;font-size: 25px;">'+$.trim(result)+'</span></label>'+
@@ -152,15 +155,17 @@ function getResult() {
 					        		}
 					        		
 					        		
-					        	}
+					        	
 					        });
 				        	$('.userinputPanel').show();
 				        }
 				        //$('.userInputDiv').append('<input type="hidden" class="form-control" name="formula" value="'+$('#formula').val()+'">');
 			        } else {
-			        	$('.InputErrorDiv').text(response);
+			        	$('.InputErrorDiv').html(response);
+			        	$('.InputErrorDiv').show();
 			        	$('.submitBtn').hide();
 			        	$('.userinputPanel').show();
+			        	$('.userInputDiv').hide();
 			        }
 			        $('#Loader1').hide();
 		    	}
