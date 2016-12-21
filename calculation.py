@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask import request
 from flask import render_template
 import json
@@ -6,13 +6,17 @@ from process_latex import process_sympy
 from flask.json import jsonify
 from sympy.core.sympify import sympify
 from sympy import Number, NumberSymbol, Symbol
+
 from getidentifiers import Getidentifiers
 import getidentifiers
 import os
 import re
 import requests
+
 from ppp_datamodel import Sentence, Request, Response
 import latexformlaidentifiers
+
+
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.sys.path.insert(0,parentdir)
 os.environ['PPP_QUESTIONPARSING_GRAMMATICAL_CONFIG'] = 'ppp_questionparsing_grammatical/nlp_classical_config.json'
@@ -52,6 +56,7 @@ def makeresponse(formul):
         reques=Formulacalculation(formul)                         
         global identifiers
         identifiers=reques.answer()
+        
         if identifiers:
             listidentifiers=list(identifiers)
             
@@ -59,15 +64,21 @@ def makeresponse(formul):
             for item in listidentifiers:
                 newlist.append(str(item))            
                 
-            newlist.append(dict(formula=formul))               
+            newlist.append(dict(formula=formul))
             
-            resp=json.dumps(newlist) 
-             
-            return resp   
+            json_data=json.dumps(newlist)
+            response=jsonify(newlist)            
+            response.status_code = 200             
+            return response   
         else:
-                  
-            return "#"+ str(formul) 
-    except Exception as e : return ("System is not able to understand the formula")
+            response = jsonify(formul)
+            response.status_code = 206  
+            print(response)           
+            return response
+    except :
+        response= jsonify("System is not able to find the result.")
+        response.status_code = 202
+        return response
     
 
 app = Flask(__name__)    
@@ -85,20 +96,18 @@ def my_form_post():
         if request.form['formula']:            
             global formula                
             formula= request.form['formula']                                 
-            #req=Formulacalculation(formula)                         
-            #listofsybol=req.answer()  
-            #print(formula.replace('/\\\\/g',''))
             global processedformula
             processedformula=latexformlaidentifiers.prepformula(formula)  
-            #print(processedformula)        
+                 
             if formula is not None: 
-                return makeresponse(processedformula)   
-            
-            else:
-                return ("System is not able to find the result.")      
+                return makeresponse(processedformula)            
                 
                 
-    except Exception as e : return ("System is not able to understand the formula")
+    except:
+        response= jsonify("System is not able to find the result.")
+        response.status_code = 202
+        return response
+        
             
 
     
@@ -111,23 +120,31 @@ def get_formula():
     """ 
        
     try:
-        question=request.form['formula']        
+        question=request.form['formula']    
+            
         meas = {'accuracy': 0.5, 'relevance': 0.5}
         q = RequestHandler(Request(language="en",id=1,tree=Sentence(question),measures=meas))
-        query = q.answer()           
-        reques= FormulaRequestHandler(query) 
+        query = q.answer()   
+                        
+        reques= FormulaRequestHandler(query)         
         global formula        
         formula=reques.answer() 
-        #print(formula)
+        
         global processedformula
-        processedformula=latexformlaidentifiers.prepformula(formula)  
-        print(formula)     
-        if(formula): 
-            return makeresponse(processedformula)       
-            
-        else:
-            return ("System is not able to find the result.")
-    except Exception : return ("System is not able to find the result.") 
+        processedformula=latexformlaidentifiers.prepformula(formula)              
+        if not (formula.startswith("System")): 
+            return makeresponse(processedformula)             
+        else:           
+             
+            response= jsonify(formula)           
+            response.status_code = 202
+            print(response)
+            return response
+    except Exception : 
+            response= jsonify("System is not able to find the result.")
+            response.status_code = 202
+            return response
+            #return ("System is not able to find the result.") 
     
 @app.route('/gethindiformula', methods=['POST'])
 def get_hindiformula():
@@ -159,13 +176,16 @@ def get_hindiformula():
         formula=reques.answer()
         global processedformula
         processedformula=latexformlaidentifiers.prepformula(formula)            
-        if formula is not None: 
-            print(formula)           
-            return makeresponse(processedformula)
+        if not (formula.startswith("System")): 
+            return makeresponse(processedformula)             
         else:
-            return ("System is not able to find the result.")             
-        
-    except Exception : return ("System is not able to find the result.") 
+            response= jsonify(formula)
+            response.status_code = 202
+            return response
+    except Exception : 
+            response= jsonify("System is not able to find the result.")
+            response.status_code = 202
+            return response
         
 
 @app.route('/getfinalresult', methods=['POST'])
@@ -197,7 +217,8 @@ def my_form_json():
                 
             return ("%.2e" % value)
             
-    except Exception : return ("System is not able to calculate the result.")   
+    except Exception :             
+            return ("System is not able to find the result.")   
   
 if __name__ == '__main__':
     app.run(debug=True)
