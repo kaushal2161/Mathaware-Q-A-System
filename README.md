@@ -1,4 +1,4 @@
-##Matheaware Q&A system
+##Matheaware QA system
 
 This system is able to answer mathematical questions asked in natural language by the user.
 
@@ -66,7 +66,7 @@ pip3 install xmltodict
 ##flask
 pip3 install Flask
 
-## After installing all the libraries follow the steps to run the Matheaware Q&A system:
+## After installing all the libraries follow the steps to run the Matheaware QA system:
 1) run the CoreNLP Server
 ```
 kaushal@kaushal:/workspace1/matheaware_Q-A_system/CoreNLP# java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 &
