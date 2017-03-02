@@ -18,8 +18,7 @@ def get_formula(sub,lang="en"):
         site = pywikibot.Site(lang, "wikipedia")
         page = pywikibot.Page(site,subject)
         item = pywikibot.ItemPage.fromPage(page)
-        subn=str(item).replace("[[wikidata:",'').replace("]]",'')
-        
+        subn=str(item).replace("[[wikidata:",'').replace("]]",'')        
         # Get the claim dictionary
         item_dict = item.get()
         clm_dict = item_dict["claims"]
@@ -50,32 +49,37 @@ def get_formula(sub,lang="en"):
         return key    
     '''
  
-def get_formula_geometry(sub,pred,subject): 
+def get_formula_geometry(sub,pred,subject,predicate): 
     """
         Get subject and predicate number
         Return value of has quality property : P1552
     """
     subn=str(sub).replace("[[wikidata:",'').replace("]]",'')
+    predn=str(pred).replace("[[wikidata:",'').replace("]]",'')
+    
     
     item_dict = sub.get()
     clm_dict = item_dict["claims"] 
     try:
         #get the has quality property:P1552
         for clm in clm_dict["P1552"]:
-            c=clm.getTarget()      
+            c=clm.getTarget()                 
             if c == pred:
-                c=clm.toJSON()
-                
-                return (c['qualifiers']['P2534'][0]['datavalue']['value'])
-                
-            else:
-                s="System could not find the formula for %s . If you know the formula \
+                c=clm.toJSON()                
+                return (c['qualifiers']['P2534'][0]['datavalue']['value'])  
+
+        else:
+            s="System could not find the formula for %s . If you know the formula \
                 you can set the has quality property  <a href='https://www.wikidata.org/wiki/P1552' target='_blank'> P1552 </a> \
-                in <a href='https://www.wikidata.org/wiki/%s' target='_blank'> %s </a>" % (subject,subn,subject)
-                return s
-    except:        
-        s="System could not find the formula for %s" % subject        
+                in <a href='https://www.wikidata.org/wiki/%s' target='_blank'> %s </a> for <a href='https://www.wikidata.org/wiki/%s' target='_blank'> %s </a>" % (subject,subn,subject,predn,predicate)
         return s
+                         
+            
+    except:        
+        s="System could not find the formula for <a href='https://www.wikidata.org/wiki/%s' target='_blank'> %s </a> " % (subn,subject)        
+        return s
+        
+    
         
 def get_formula_sparql(sub,pred):
     """
@@ -111,7 +115,7 @@ def get_formula_sparql(sub,pred):
         return (result['math']['semantics']['annotation']['#text'])
         
     except:
-        s="System could not find the formula for %s and %s" % (sub,pred)         
+        s="System could not find the formula for <a> %s </a> and <a> %s </a>" % (sub,pred)         
         return s 
         
 
@@ -123,24 +127,23 @@ def get_item_number(subject,predicate,lang="en"):
     """
     
     try:    
-        usub=str(subject)
-        upred=str(predicate)         
+        usub=str(subject)        
+        upred=str(predicate)                
         site = pywikibot.Site(lang, "wikipedia")
         subjecti= pywikibot.Page(site,usub)           
-        sitem = pywikibot.ItemPage.fromPage(subjecti)        
+        sitem = pywikibot.ItemPage.fromPage(subjecti)           
         predicatei= pywikibot.Page(site, upred)  
-        pitem = pywikibot.ItemPage.fromPage(predicatei) 
+        pitem = pywikibot.ItemPage.fromPage(predicatei)         
         subn=str(sitem).replace("[[wikidata:",'').replace("]]",'')
         predn=str(pitem).replace("[[wikidata:",'').replace("]]",'')       
         if(lang=="en"):                       
-            return get_formula_geometry(sitem,pitem,usub)        
+            return get_formula_geometry(sitem,pitem,usub,upred)        
         if upred in Hindigeolist:           
-            return get_formula_geometry(sitem, pitem,usub)        
+            return get_formula_geometry(sitem, pitem,usub,upred)        
         else:
             return get_formula_sparql(subn,predn)
-    except:
-        s="System could not find information on the %s <a href='https://www.wikidata.org/wiki/%s' target='_blank'> \
-        %s </a> for %s" % (usub,subn,upred ,subn) 
+    except:        
+        s="System could not find the item <a> %s </a>" % (usub)         
         return s
     
             
@@ -155,7 +158,7 @@ def predicate(predicate,subject):
     elif predicate in formulalist:              
         return get_formula(subject)
     else:
-        s="System could not find the item %s for %s" % (predicate,subject)          
+        s="System could not find the item <a> %s </a> for <a> %s </a> in Wikidata" % (predicate,subject)          
         return s 
         
 class FormulaRequestHandler:
